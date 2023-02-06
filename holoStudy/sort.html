@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <section>
+        <ul id="test-list">
+            <li data-price="1,000" data-date="23-01-01">천원(23-01-01)</li>
+            <li data-price="1,500" data-date="23-01-07">천오백원(23-01-07)</li>
+            <li data-price="900" data-date="23-01-04">구백원(23-01-04)</li>
+            <li data-price="1,200" data-date="23-01-09">천이백원(23-01-09)</li>
+            <li data-price="1,800" data-date="23-01-03">천팔백원(23-01-03)</li>
+        </ul>
+        <button class="asc" data-name="price" onclick="sortClick(this);">가격 오름차순</button>
+        <button class="dsc" data-name="price" onclick="sortClick(this);">가격 내림차순</button>
+        <br> <br>
+        <button class="asc" data-name="date" onclick="sortClick(this);">날짜 오름차순</button>
+        <button class="dsc" data-name="date" onclick="sortClick(this);">날짜 내림차순</button>
+    </section>
+
+    <script>
+        function sortClick(sortBtn) {
+            let sortVal = $(sortBtn).prop('class');
+            let dataName = $(sortBtn).data('name');
+            // console.log(sortBtn);
+            // console.log(sortVal);
+            // console.log(dataName);
+            $('#test-list').html(
+                $('#test-list li').sort(function(a,b){
+
+                    let dataA_ = $(a).data(dataName);
+                    let dataB_ = $(b).data(dataName);
+
+                    // console.log(dataA_);
+                    // console.log(dataB_);
+
+                    let dataA, dataB;
+                    
+                    if(dataName === 'price'){
+                        if(isNaN(dataA_)) dataA = parseInt(dataA_.replace(/,/g , ''));
+                        else dataA = dataA_;
+                        if(isNaN(dataB_)) dataB = parseInt(dataB_.replace(/,/g , ''));
+                        else dataB = dataB_;
+                    } else{
+                        if(isNaN(dataA_)) dataA = parseInt(dataA_.replace(/\-/g , ''));
+                        else dataA = dataA_;
+                        if(isNaN(dataB_)) dataB = parseInt(dataB_.replace(/\-/g , ''));
+                        else dataB = dataB_;
+                    }
+
+                    console.log(dataA);
+                    console.log(dataB);
+
+                    if(sortVal === 'asc'){
+                        // return $(a).data('price') - $(b).data('price');
+                        return dataA - dataB;
+                    } else{
+                        // return $(b).data('price') - $(a).data('price');
+                        return dataB - dataA;
+                    }
+                })
+            );
+        }
+    </script>
+</body>
+</html>
