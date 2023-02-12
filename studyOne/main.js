@@ -2,37 +2,8 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url'); // 모듈 url
 var qs = require('querystring');
-
-var template = {
-  HTML : function (title, list, body, control){
-    return `
-    <!doctype html>
-    <html>
-    <head>
-      <title>WEB1 - ${title}</title>
-      <meta charset="utf-8">
-    </head>
-    <body>
-      <h1><a href="/">WEB</a></h1>
-      ${list}
-      ${control}
-      ${body}
-    </body>
-    </html>    
-    `;
-  }, list : function (fileList){
-        var list = '<ul>';
-      
-        for(var i = 0; i < fileList.length; i++){
-          list += `<li><a href="/?id=${fileList[i]}">${fileList[i]}</a></li>`
-        }
-      
-        list += '</ul>';8
-      
-        return list;
-      }
-
-}
+var template = require('./lib/template.js');
+var path = require('path');
 
 var app = http.createServer(function(request,response){
     var _url = request.url;
@@ -56,7 +27,8 @@ var app = http.createServer(function(request,response){
         })
 
       } else{
-        fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
+        var fileteredId = path.parse(queryData.id).base;
+        fs.readFile(`data/${fileteredId}`, 'utf8', function(err, description){
           fs.readdir('./data', function(error, fileList){
             
             var list = template.list(fileList);
@@ -113,7 +85,8 @@ var app = http.createServer(function(request,response){
         });
 
     } else if(pathname === '/update'){
-      fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description){
+      var fileteredId = path.parse(queryData.id).base;
+      fs.readFile(`data/${fileteredId}`, 'utf8', function(err, description){
         fs.readdir('./data', function(error, fileList){
           
           var list = template.list(fileList);
@@ -165,8 +138,8 @@ var app = http.createServer(function(request,response){
       request.on('end', function(){
         var post = qs.parse(body);
         var id = post.id;
-
-        fs.unlink(`data/${id}`,function(){
+        var fileteredId = path.parse(id).base;
+        fs.unlink(`data/${fileteredId}`,function(){
           response.writeHead(302, {Location : `/`});
           response.end('success');
         })
