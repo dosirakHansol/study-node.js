@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>on_event_test</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            background-color: grey;
+            display: flex;
+            flex-direction: column;
+        }
+        button{
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="checkbox" name="" id="01" onclick="test01(this);">
+        <input type="checkbox" name="" id="02" checked>
+        <input type="checkbox" name="" id="03">
+        <input type="checkbox" name="" id="04">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script>
+        function test01(param){
+            if($(param).is(':checked')) $('#03').prop('checked',true);
+            else $('#03').prop('checked',false);
+        }
+        $('#02').on('click',function(){
+            console.log($(this).prop('checked'));
+            if($(this).is(':checked')) $('#04').prop('checked',true);
+            else $('#04').prop('checked',false);
+        })
+    </script>
+
+    <!-- 
+        회사에서는 onClick으로 함수호출 할 때와 
+        eventListner를 사용했을때의 차이점이 있었는데... 어떤점인지 정확히 기록해서 테스트 해봐야겠다.
+        
+    -->
+    
+</body>
+</html>
