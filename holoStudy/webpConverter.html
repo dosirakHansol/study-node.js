@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .convert{
+            position: relative;
+            margin-top: 50px;
+            text-align: center;
+        }
+        #userImage{
+            height: 100px;
+            background-color: purple;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0;
+        }
+        .mask{
+            position: absolute;
+            top: 58px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 100px;
+            width: 255px;
+            background-color: grey;
+            border-radius: 10px;
+            z-index: -1;
+        }
+        .mask h4{
+            margin-top: 38px;
+            font-size: 20px;
+        }
+
+        .images{
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: center;
+            text-align: center;
+            margin: auto;
+        }
+
+        .images div{
+            width: 400px;
+            margin: auto;
+        }
+
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="convert">
+        <h1>Convert image to webp format</h1>
+        <input type="file" accept="image/*" name="convert" id="userImage" onchange="convertImage(event);">
+        <div class="mask">
+            <h4>Upload an image</h4>
+        </div>
+    </div>
+    <div class="images">
+        <div>
+            <h2>Original Image</h2>
+            <img src="" id="Uimage">
+        </div>
+        <div>
+            <h2>Change Image</h2>
+            <img src="" id="Wimage">
+        </div>
+    </div>
+
+    <script>
+        const Uimage = document.querySelector('#Uimage');
+        const Wimage = document.querySelector('#Wimage');
+        function convertImage(event){
+            if(event.target.files.length > 0){
+
+                // show user image
+                let src = URL.createObjectURL(event.target.files[0]);
+                Uimage.src = src;
+                
+                // convert user image to Canvas
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+
+                let userImage = new Image();
+                userImage.src = src;
+
+                userImage.onload = function(){
+                    canvas.width = userImage.width;
+                    canvas.height = userImage.height;
+                    ctx.drawImage(userImage, 0, 0);
+
+                    // let webpImage = canvas.toDataURL('image/webp',1); //,1 은 높은품질 사용 할 경우
+                    let webpImage = canvas.toDataURL('image/webp');
+                    Wimage.src = webpImage;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
