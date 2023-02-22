@@ -82,16 +82,23 @@
         function convertImage(event){
             if(event.target.files.length > 0){
 
+                let ogFile = event.target.files[0];
+                console.log(`ogFile ::: `); //testlog
+                console.log(ogFile);        //testlog
+
                 // show user image
                 let src = URL.createObjectURL(event.target.files[0]);
                 Uimage.src = src;
-                
+
                 // convert user image to Canvas
                 let canvas = document.createElement('canvas');
                 let ctx = canvas.getContext('2d');
 
                 let userImage = new Image();
                 userImage.src = src;
+
+                console.log(`ogSrc ::: `);
+                console.log(src);
 
                 userImage.onload = function(){
                     canvas.width = userImage.width;
@@ -100,7 +107,20 @@
 
                     // let webpImage = canvas.toDataURL('image/webp',1); //,1 은 높은품질 사용 할 경우
                     let webpImage = canvas.toDataURL('image/webp');
-                    Wimage.src = webpImage;
+                    // Wimage.src = webpImage;
+                    
+                    // gordon
+                    // 변경된 이미지를 다시 파일로 변경 start
+                    let blobBin = atob(webpImage.split(',')[1]);
+                    let _arr = [];
+                    for(var i = 0; i < blobBin.length; i++){
+                        _arr.push(blobBin.charCodeAt(i));
+                    }
+                    let webpFile = new File([new Uint8Array(_arr)], 'changed_name', {type: 'image/webp'});
+                    // 변경된 이미지를 다시 파일로 변경 end
+                    
+                    let changeSrc = URL.createObjectURL(webpFile);
+                    Wimage.src = changeSrc;
                 }
             }
         }
